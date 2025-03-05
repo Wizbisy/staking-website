@@ -46,6 +46,23 @@
         </button>
     </div>
 
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto animate__animated animate__fadeIn">
+    <div id="walletInfo" class="hidden">
+        <p class="text-sm">Connected Wallet: <span id="walletAddress" class="font-medium"></span></p>
+        <input type="number" id="stakeAmount" placeholder="Amount to stake" class="w-full mt-4 p-2 border rounded">
+        <button id="stakeTokens" class="w-full mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+            Stake Tokens
+        </button>
+        <button id="unstakeTokens" class="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+            Unstake Tokens
+        </button>
+        <!-- Add this button for the faucet -->
+        <button id="claimTokens" class="w-full mt-4 bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600">
+            Claim Tokens
+        </button>
+    </div>
+    </div>
+
     <!-- Footer -->
     <footer class="text-center mt-8 p-4 bg-gray-800 text-white">
         <p>&copy; 2023 Staking Platform. All rights reserved.</p>
