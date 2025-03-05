@@ -1,64 +1,286 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staking Platform</title>
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Animate.css -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 text-gray-800">
-    <!-- Hero Section -->
-    <div class="bg-blue-600 text-white py-20">
-        <div class="container mx-auto text-center">
-            <h1 class="text-5xl font-bold mb-4 animate__animated animate__fadeInDown">Welcome to the Staking Platform</h1>
-            <p class="text-xl mb-8 animate__animated animate__fadeInUp">Earn rewards by staking your tokens with us!</p>
-            <button id="connectWallet" class="bg-white text-blue-600 py-3 px-6 rounded-full font-semibold hover:bg-gray-100 animate__animated animate__fadeIn">
-                Connect Wallet
-            </button>
-        </div>
-    </div>
+// Contract ABI
+const stakingContractABI = [
+    {
+        "inputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "_wizbisywebToken",
+                "type": "address"
+            },
+            {
+                "internalType": "contract DWeb",
+                "name": "_dwebToken",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "TokensClaimed",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "TokensStaked",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "TokensUnstaked",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "APR",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_CLAIM",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "SECONDS_IN_MONTH",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimTokens",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "dwebToken",
+        "outputs": [
+            {
+                "internalType": "contract DWeb",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "lastClaimTime",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "stakeTokens",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "stakedBalances",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "stakingStartTimes",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "unstakeTokens",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "wizbisywebToken",
+        "outputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
 
-    <!-- Main Content -->
-    <div class="container mx-auto p-4">
-        <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto animate__animated animate__fadeIn">
-            <div id="walletInfo" class="hidden">
-                <p class="text-sm">Connected Wallet: <span id="walletAddress" class="font-medium"></span></p>
-                <input type="number" id="stakeAmount" placeholder="Amount to stake" class="w-full mt-4 p-2 border rounded">
-                <button id="stakeTokens" class="w-full mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-                    Stake Tokens
-                </button>
-                <button id="unstakeTokens" class="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
-                    Unstake Tokens
-                </button>
-            </div>
-        </div>
-    </div>
+// Contract Address
+const stakingContractAddress = '0x5593e2C04E4c8136274DC690Ba233A81d23dB18e'; // Replace with your staking contract address
 
-    <!-- Call-to-Action Section -->
-    <div class="bg-green-100 p-6 rounded-lg text-center mt-8">
-        <h2 class="text-2xl font-bold mb-4">Start Staking Today!</h2>
-        <p class="mb-4">Join thousands of users earning rewards with our platform.</p>
-        <button id="connectWallet" class="bg-green-500 text-white py-2 px-6 rounded-full font-semibold hover:bg-green-600">
-            Connect Wallet
-        </button>
-    </div>
+// Connect to Ethereum (MetaMask)
+let provider, signer, stakingContract;
 
-    <!-- Footer -->
-    <footer class="text-center mt-8 p-4 bg-gray-800 text-white">
-        <p>&copy; 2023 Staking Platform. All rights reserved.</p>
-        <p>
-            <a href="#" class="text-blue-400 hover:text-blue-300">Twitter</a> |
-            <a href="#" class="text-blue-400 hover:text-blue-300">GitHub</a> |
-            <a href="#" class="text-blue-400 hover:text-blue-300">Contact</a>
-        </p>
-    </footer>
+document.getElementById('connectWallet').addEventListener('click', async () => {
+    if (window.ethereum) {
+        try {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            signer = provider.getSigner();
+            stakingContract = new ethers.Contract(stakingContractAddress, stakingContractABI, signer);
 
-    <!-- Ethers.js -->
-    <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js"></script>
-    <!-- Your JavaScript -->
-    <script src="app.js"></script>
-</body>
-</html>
+            const walletAddress = await signer.getAddress();
+            document.getElementById('walletAddress').textContent = walletAddress;
+            document.getElementById('walletInfo').style.display = 'block';
+        } catch (error) {
+            console.error(error);
+            alert('Failed to connect wallet. Check the console for details.');
+        }
+    } else {
+        alert('Please install MetaMask!');
+    }
+});
+
+// Stake Tokens
+document.getElementById('stakeTokens').addEventListener('click', async () => {
+    const amount = document.getElementById('stakeAmount').value;
+    if (amount > 0) {
+        try {
+            const tx = await stakingContract.stakeTokens(ethers.utils.parseEther(amount));
+            await tx.wait();
+            alert('Tokens staked successfully!');
+        } catch (error) {
+            console.error(error);
+            alert('Staking failed. Check the console for details.');
+        }
+    } else {
+        alert('Please enter a valid amount.');
+    }
+});
+
+// Unstake Tokens
+document.getElementById('unstakeTokens').addEventListener('click', async () => {
+    try {
+        const tx = await stakingContract.unstakeTokens();
+        await tx.wait();
+        alert('Tokens unstaked successfully!');
+    } catch (error) {
+        console.error(error);
+        alert('Unstaking failed. Check the console for details.');
+    }
+});
