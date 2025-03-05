@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staking Platform</title>
+    <title>Staking Platform - Monad Chain</title>
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Animate.css -->
@@ -14,7 +14,7 @@
     <div class="bg-blue-600 text-white py-20">
         <div class="container mx-auto text-center">
             <h1 class="text-5xl font-bold mb-4 animate__animated animate__fadeInDown">Welcome to the Staking Platform</h1>
-            <p class="text-xl mb-8 animate__animated animate__fadeInUp">Earn rewards by staking your tokens with us!</p>
+            <p class="text-xl mb-8 animate__animated animate__fadeInUp">Earn rewards by staking your tokens on the Monad chain!</p>
             <button id="connectWallet" class="bg-white text-blue-600 py-3 px-6 rounded-full font-semibold hover:bg-gray-100 animate__animated animate__fadeIn">
                 Connect Wallet
             </button>
@@ -33,6 +33,10 @@
                 <button id="unstakeTokens" class="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
                     Unstake Tokens
                 </button>
+                <!-- Faucet Button -->
+                <button id="claimTokens" class="w-full mt-4 bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600">
+                    Claim Tokens
+                </button>
             </div>
         </div>
     </div>
@@ -40,27 +44,10 @@
     <!-- Call-to-Action Section -->
     <div class="bg-green-100 p-6 rounded-lg text-center mt-8">
         <h2 class="text-2xl font-bold mb-4">Start Staking Today!</h2>
-        <p class="mb-4">Join thousands of users earning rewards with our platform.</p>
+        <p class="mb-4">Join thousands of users earning rewards on the Monad chain.</p>
         <button id="connectWallet" class="bg-green-500 text-white py-2 px-6 rounded-full font-semibold hover:bg-green-600">
             Connect Wallet
         </button>
-    </div>
-
-    <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto animate__animated animate__fadeIn">
-    <div id="walletInfo" class="hidden">
-        <p class="text-sm">Connected Wallet: <span id="walletAddress" class="font-medium"></span></p>
-        <input type="number" id="stakeAmount" placeholder="Amount to stake" class="w-full mt-4 p-2 border rounded">
-        <button id="stakeTokens" class="w-full mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-            Stake Tokens
-        </button>
-        <button id="unstakeTokens" class="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
-            Unstake Tokens
-        </button>
-        <!-- Add this button for the faucet -->
-        <button id="claimTokens" class="w-full mt-4 bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600">
-            Claim Tokens
-        </button>
-    </div>
     </div>
 
     <!-- Footer -->
