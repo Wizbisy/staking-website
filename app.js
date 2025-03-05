@@ -233,8 +233,36 @@ const stakingContractABI = [
 // Contract Address
 const stakingContractAddress = '0x5593e2C04E4c8136274DC690Ba233A81d23dB18e'; // Replace with your contract address
 
-// Monad Chain ID
-const monadChainId = '0x279F'; // 10143 in hexadecimal
+// Monad Testnet Chain Details
+const monadChainId = '0x279F'; // Replace with the actual Monad Testnet Chain ID (in hexadecimal)
+const monadChainName = 'Monad Testnet';
+const monadRpcUrl = 'https://testnet-rpc.monad.xyz'; // Monad Testnet RPC URL
+const monadCurrencySymbol = 'MONAD'; // Replace with the actual currency symbol for Monad Testnet
+const monadBlockExplorerUrl = 'https://testnet-explorer.monad.xyz'; // Replace with the actual block explorer URL for Monad Testnet
+
+// Function to switch to Monad Testnet
+async function switchToMonadTestnet() {
+    try {
+        await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+                chainId: monadChainId,
+                chainName: monadChainName,
+                nativeCurrency: {
+                    name: monadCurrencySymbol,
+                    symbol: monadCurrencySymbol,
+                    decimals: 18,
+                },
+                rpcUrls: [monadRpcUrl],
+                blockExplorerUrls: [monadBlockExplorerUrl],
+            }],
+        });
+        return true;
+    } catch (error) {
+        console.error("Error switching to Monad Testnet:", error);
+        return false;
+    }
+}
 
 // Connect to Monad Chain (MetaMask)
 let provider, signer, stakingContract;
@@ -242,12 +270,16 @@ let provider, signer, stakingContract;
 document.getElementById('connectWallet').addEventListener('click', async () => {
     if (window.ethereum) {
         try {
-            // Check if the correct chain (Monad) is connected
+            // Check if the correct chain (Monad Testnet) is connected
             const chainId = await window.ethereum.request({ method: 'eth_chainId' });
 
             if (chainId !== monadChainId) {
-                alert('Please switch to the Monad chain in MetaMask.');
-                return;
+                // Prompt the user to switch to the Monad Testnet
+                const switched = await switchToMonadTestnet();
+                if (!switched) {
+                    alert('Failed to switch to the Monad Testnet. Please switch manually in MetaMask.');
+                    return;
+                }
             }
 
             // Request account access
