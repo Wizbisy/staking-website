@@ -231,7 +231,7 @@ const stakingContractABI = [
 ];
 
 // Contract Address
-const stakingContractAddress = '0x5593e2C04E4c8136274DC690Ba233A81d23dB18e'; // Replace with your staking contract address
+const stakingContractAddress = '0x5593e2C04E4c8136274DC690Ba233A81d23dB18e'; // Replace with your contract address
 
 // Connect to Ethereum (MetaMask)
 let provider, signer, stakingContract;
@@ -239,23 +239,27 @@ let provider, signer, stakingContract;
 document.getElementById('connectWallet').addEventListener('click', async () => {
     if (window.ethereum) {
         try {
-            // Request account access
+            console.log("Requesting accounts...");
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            console.log("Accounts:", accounts);
+
             if (accounts.length > 0) {
-                // Initialize ethers.js provider and signer
+                console.log("Initializing provider and signer...");
                 provider = new ethers.providers.Web3Provider(window.ethereum);
                 signer = provider.getSigner();
                 stakingContract = new ethers.Contract(stakingContractAddress, stakingContractABI, signer);
 
-                // Display connected wallet address
+                console.log("Fetching wallet address...");
                 const walletAddress = await signer.getAddress();
+                console.log("Wallet Address:", walletAddress);
+
                 document.getElementById('walletAddress').textContent = walletAddress;
                 document.getElementById('walletInfo').style.display = 'block';
             } else {
                 alert('No accounts found. Please unlock MetaMask.');
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error connecting wallet:", error);
             alert('Failed to connect wallet. Check the console for details.');
         }
     } else {
@@ -268,11 +272,12 @@ document.getElementById('stakeTokens').addEventListener('click', async () => {
     const amount = document.getElementById('stakeAmount').value;
     if (amount > 0) {
         try {
+            console.log("Staking tokens...");
             const tx = await stakingContract.stakeTokens(ethers.utils.parseEther(amount));
             await tx.wait();
             alert('Tokens staked successfully!');
         } catch (error) {
-            console.error(error);
+            console.error("Error staking tokens:", error);
             alert('Staking failed. Check the console for details.');
         }
     } else {
@@ -283,11 +288,12 @@ document.getElementById('stakeTokens').addEventListener('click', async () => {
 // Unstake Tokens
 document.getElementById('unstakeTokens').addEventListener('click', async () => {
     try {
+        console.log("Unstaking tokens...");
         const tx = await stakingContract.unstakeTokens();
         await tx.wait();
         alert('Tokens unstaked successfully!');
     } catch (error) {
-        console.error(error);
+        console.error("Error unstaking tokens:", error);
         alert('Unstaking failed. Check the console for details.');
     }
 });
