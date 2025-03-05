@@ -233,26 +233,33 @@ const stakingContractABI = [
 // Contract Address
 const stakingContractAddress = '0x5593e2C04E4c8136274DC690Ba233A81d23dB18e'; // Replace with your contract address
 
-// Connect to Ethereum (MetaMask)
+// Monad Chain ID
+const monadChainId = '0x279F'; // 10143 in hexadecimal
+
+// Connect to Monad Chain (MetaMask)
 let provider, signer, stakingContract;
 
 document.getElementById('connectWallet').addEventListener('click', async () => {
     if (window.ethereum) {
         try {
-            console.log("Requesting accounts...");
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            console.log("Accounts:", accounts);
+            // Check if the correct chain (Monad) is connected
+            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
 
+            if (chainId !== monadChainId) {
+                alert('Please switch to the Monad chain in MetaMask.');
+                return;
+            }
+
+            // Request account access
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             if (accounts.length > 0) {
-                console.log("Initializing provider and signer...");
+                // Initialize ethers.js provider and signer
                 provider = new ethers.providers.Web3Provider(window.ethereum);
                 signer = provider.getSigner();
                 stakingContract = new ethers.Contract(stakingContractAddress, stakingContractABI, signer);
 
-                console.log("Fetching wallet address...");
+                // Display connected wallet address
                 const walletAddress = await signer.getAddress();
-                console.log("Wallet Address:", walletAddress);
-
                 document.getElementById('walletAddress').textContent = walletAddress;
                 document.getElementById('walletInfo').style.display = 'block';
             } else {
@@ -298,7 +305,7 @@ document.getElementById('unstakeTokens').addEventListener('click', async () => {
     }
 });
 
-// Claim Tokens
+// Claim Tokens (Faucet)
 document.getElementById('claimTokens').addEventListener('click', async () => {
     try {
         console.log("Claiming tokens...");
