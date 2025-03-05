@@ -297,3 +297,16 @@ document.getElementById('unstakeTokens').addEventListener('click', async () => {
         alert('Unstaking failed. Check the console for details.');
     }
 });
+
+// Claim Tokens
+document.getElementById('claimTokens').addEventListener('click', async () => {
+    try {
+        console.log("Claiming tokens...");
+        const tx = await stakingContract.claimTokens();
+        await tx.wait();
+        alert('Tokens claimed successfully!');
+    } catch (error) {
+        console.error("Error claiming tokens:", error);
+        alert('Claiming tokens failed. Check the console for details.');
+    }
+});
