@@ -239,14 +239,21 @@ let provider, signer, stakingContract;
 document.getElementById('connectWallet').addEventListener('click', async () => {
     if (window.ethereum) {
         try {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            provider = new ethers.providers.Web3Provider(window.ethereum);
-            signer = provider.getSigner();
-            stakingContract = new ethers.Contract(stakingContractAddress, stakingContractABI, signer);
+            // Request account access
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            if (accounts.length > 0) {
+                // Initialize ethers.js provider and signer
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                stakingContract = new ethers.Contract(stakingContractAddress, stakingContractABI, signer);
 
-            const walletAddress = await signer.getAddress();
-            document.getElementById('walletAddress').textContent = walletAddress;
-            document.getElementById('walletInfo').style.display = 'block';
+                // Display connected wallet address
+                const walletAddress = await signer.getAddress();
+                document.getElementById('walletAddress').textContent = walletAddress;
+                document.getElementById('walletInfo').style.display = 'block';
+            } else {
+                alert('No accounts found. Please unlock MetaMask.');
+            }
         } catch (error) {
             console.error(error);
             alert('Failed to connect wallet. Check the console for details.');
